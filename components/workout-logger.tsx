@@ -1109,7 +1109,7 @@ export function WorkoutLogger() {
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 className="w-full p-3 border rounded-lg min-h-[100px] bg-input text-foreground"
-                placeholder="Enter your notes here..."
+                placeholder="Warm up set, pain in shoulder, etc."
               />
               <div className="flex gap-3 mt-4">
                 <Button
