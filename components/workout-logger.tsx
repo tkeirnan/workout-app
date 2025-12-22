@@ -421,37 +421,48 @@ export function WorkoutLogger() {
   };
 
   const handleDelete = async (id: string) => {
+    console.log("🔍 DELETE STARTED for ID:", id);
+
     // Try to delete from Supabase first
     try {
       const { data: user } = await supabase.auth.getUser();
+      console.log("👤 Current user:", user.user?.id);
+
       if (user.user) {
+        console.log("🗑️ Attempting Supabase delete...");
         const { error } = await supabase
           .from("workouts")
           .delete()
           .eq("id", Number.parseInt(id))
           .eq("user_id", user.user.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("❌ Supabase delete error:", error);
+          throw error;
+        }
+        console.log("✅ Supabase delete successful");
+      } else {
+        console.log("⚠️ No user logged in");
       }
     } catch (error) {
-      console.error("Error deleting from database:", error);
+      console.error("❌ Error deleting from database:", error);
       // Continue with local delete even if database fails
     }
 
     // Update local state
+    console.log("🔄 Updating local state...");
     setEntries(entries.filter((entry) => entry.id !== id));
     if (editingId === id) {
       setExerciseName("");
       setWeight("");
       setReps("");
-
       setRest("");
-
       setRir("");
       setRpe("");
       setShowTut(false);
       setEditingId(null);
     }
+    console.log("🏁 DELETE COMPLETE");
   };
 
   const handleCancel = () => {
