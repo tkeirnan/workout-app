@@ -1091,6 +1091,48 @@ export function WorkoutLogger() {
           </div>
         )}
 
+        {/* Notes Modal */}
+        {showNoteModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-md bg-background p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold">Add Note</h2>
+                <button
+                  onClick={() => setShowNoteModal(false)}
+                  className="p-1 rounded hover:bg-muted"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full p-3 border rounded-lg min-h-[100px] bg-input text-foreground"
+                placeholder="Enter your notes here..."
+              />
+              <div className="flex gap-3 mt-4">
+                <Button
+                  onClick={() => setShowNoteModal(false)}
+                  className="flex-1"
+                >
+                  Save Note
+                </Button>
+                <Button
+                  onClick={() => {
+                    setNote("");
+                    setShowNoteModal(false);
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Clear
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+
         {/* QR ID at the bottom of the page - Only shows after hydration */}
         {qrCodeId && (
           <div className="pt-6 pb-2 text-center">
