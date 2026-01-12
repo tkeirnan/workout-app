@@ -543,7 +543,7 @@ export function WorkoutLogger() {
               className="cursor-pointer group"
             >
               <h1 className="sm:text-3xl font-bold text-foreground group-hover:text-accent transition-colors text-2xl">
-                {machineName || "Machine Name"}
+                {machineName || "Exercise Machine Name"}
               </h1>
               <p className="text-xs text-muted-foreground mt-1 group-hover:text-foreground transition-colors">
                 Tap to edit
