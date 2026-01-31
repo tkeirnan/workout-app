@@ -37,7 +37,6 @@ interface WorkoutEntry {
   };
   timestamp: Date;
   formattedTime: string;
-  nextSetTime?: string;
   localSaved: boolean;
   serverSaved: boolean;
 }
@@ -71,6 +70,9 @@ export function WorkoutLogger() {
   const [gymOwnerConnected, setGymOwnerConnected] = useState(false);
   const [gymContactInfo, setGymContactInfo] = useState("");
   const [showContactForm, setShowContactForm] = useState(false);
+  const [currentNextSetTime, setCurrentNextSetTime] = useState<string | null>(
+    null
+  );
 
   // Add these with your other useState declarations:
   const [user, setUser] = useState<any>(null);
@@ -146,9 +148,6 @@ export function WorkoutLogger() {
               second: "2-digit",
               hour12: true,
             })}`,
-            nextSetTime: w.rest_seconds
-              ? calculateNextSetTime(w.rest_seconds)
-              : undefined,
             localSaved: true,
             serverSaved: true,
           }));
@@ -264,9 +263,21 @@ export function WorkoutLogger() {
     const now = new Date();
     const timeData = formatTime(now);
     const restSeconds = rest.trim() ? Number.parseInt(rest) : undefined;
-    const nextSetTime = restSeconds
-      ? calculateNextSetTime(restSeconds)
-      : undefined;
+
+    // Calculate next set time if rest was specified
+    let nextSetTime: string | null = null;
+    if (restSeconds) {
+      const nextTime = new Date(Date.now() + restSeconds * 1000);
+      nextSetTime = nextTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      });
+    }
+
+    // Set it as the current next set time
+    setCurrentNextSetTime(nextSetTime);
 
     const hasTut =
       tutConcentric.trim() || tutEccentric.trim() || tutIsometric.trim();
@@ -352,7 +363,6 @@ export function WorkoutLogger() {
       tut: tutData,
       timestamp: now,
       formattedTime: `${timeData.dateStr}\n${timeData.timeStr}`,
-      nextSetTime,
       localSaved: true,
       serverSaved,
     };
@@ -765,7 +775,7 @@ export function WorkoutLogger() {
           </div>
         </Card>
 
-{/* Auth UI Component */}
+        {/* Auth UI Component */}
         <div className="mb-6">
           {isLoadingAuth ? (
             <div className="text-sm text-muted-foreground text-center py-2">
@@ -864,14 +874,14 @@ export function WorkoutLogger() {
             </p>
           ) : (
             <div className="space-y-2">
-              {entries.map((entry) => (
+              {entries.map((entry, index) => (
                 <div key={entry.id}>
                   <div className="flex items-stretch justify-between gap-3 p-4 sm:p-5 rounded-lg hover:bg-muted/50 transition-colors group min-h-[140px] border border-border/30">
                     <div className="flex-1 min-w-0">
-                      {/* LINE 4: NEXT SET TIME - Important, colored */}
-                      {entry.nextSetTime && (
+                      {/* LINE 4: NEXT SET TIME - Show only for most recent entry with rest */}
+                      {index === 0 && currentNextSetTime && entry.rest && (
                         <p className="text-sm text-accent font-semibold mt-2">
-                          ⏱️ Next set: {entry.nextSetTime}
+                          ⏱️ Next set: {currentNextSetTime}
                         </p>
                       )}
 
