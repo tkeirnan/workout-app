@@ -17,7 +17,7 @@ import { createClient } from "@supabase/supabase-js";
 // Initialize Supabase client
 const supabase = createClient(
   "https://kvvyrpuwnxvrqwubcbyd.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2dnlycHV3bnh2cnF3dWJjYnlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NzM3MTQsImV4cCI6MjA4MDU0OTcxNH0.jeoG7oK--qaUYxiZAmhUWaojZzU5s7Kkk6J0CXqMTgE"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2dnlycHV3bnh2cnF3dWJjYnlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NzM3MTQsImV4cCI6MjA4MDU0OTcxNH0.jeoG7oK--qaUYxiZAmhUWaojZzU5s7Kkk6J0CXqMTgE",
 );
 
 interface WorkoutEntry {
@@ -71,7 +71,7 @@ export function WorkoutLogger() {
   const [gymContactInfo, setGymContactInfo] = useState("");
   const [showContactForm, setShowContactForm] = useState(false);
   const [currentNextSetTime, setCurrentNextSetTime] = useState<string | null>(
-    null
+    null,
   );
 
   // Add these with your other useState declarations:
@@ -95,7 +95,7 @@ export function WorkoutLogger() {
     const randomId = Math.random().toString(36).substr(2, 9).toUpperCase();
     const formattedId = `${randomId.slice(0, 3)}-${randomId.slice(
       3,
-      6
+      6,
     )}-${randomId.slice(6, 9)}`;
     setQrCodeId(formattedId);
   }, []);
@@ -141,7 +141,7 @@ export function WorkoutLogger() {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
-              }
+              },
             )}\n${new Date(w.created_at).toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
@@ -369,7 +369,7 @@ export function WorkoutLogger() {
 
     if (editingId) {
       setEntries(
-        entries.map((entry) => (entry.id === editingId ? newEntry : entry))
+        entries.map((entry) => (entry.id === editingId ? newEntry : entry)),
       );
       setEditingId(null);
     } else {
@@ -552,10 +552,13 @@ export function WorkoutLogger() {
               onClick={() => setIsEditingMachineName(true)}
               className="cursor-pointer group"
             >
-              <h1 className="sm:text-3xl font-bold text-foreground group-hover:text-accent transition-colors text-2xl">
+              <h1 className="sm:text-3xl font-bold text-pf-yellow group-hover:text-accent transition-colors text-2xl">
                 {machineName || "Exercise Machine Name"}
               </h1>
-              <p className="text-xs text-muted-foreground mt-1 group-hover:text-foreground transition-colors">
+              <p
+                style={{ color: "#FFFFFF" }}
+                className="text-xs mt-1 transition-colors"
+              >
                 Tap to edit
               </p>
             </div>
@@ -778,7 +781,7 @@ export function WorkoutLogger() {
         {/* Auth UI Component */}
         <div className="mb-6">
           {isLoadingAuth ? (
-            <div className="text-sm text-muted-foreground text-center py-2">
+            <div className="text-sm text-card text-center py-2">
               Checking authentication...
             </div>
           ) : user ? (
@@ -795,7 +798,7 @@ export function WorkoutLogger() {
                   <p className="text-sm font-medium">
                     {user.user_metadata?.full_name || user.email}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-foreground">
                     Your workouts are saved privately
                   </p>
                 </div>
@@ -880,13 +883,13 @@ export function WorkoutLogger() {
                     <div className="flex-1 min-w-0">
                       {/* LINE 4: NEXT SET TIME - Show only for most recent entry with rest */}
                       {index === 0 && currentNextSetTime && entry.rest && (
-                        <p className="text-sm text-accent font-semibold mt-2">
-                          ⏱️ Next set: {currentNextSetTime}
+                        <p className="text-sm text-accent font-semibold mt-1">
+                          Next set: {currentNextSetTime}
                         </p>
                       )}
 
                       {/* LINE 1: EXERCISE NAME - Larger */}
-                      <p className="text-lg sm:text-xl font-bold text-foreground">
+                      <p className="text-lg sm:text-xl font-bold text-foreground mt-1">
                         {entry.exerciseName}
                       </p>
 
@@ -961,18 +964,14 @@ export function WorkoutLogger() {
                       <div className="flex gap-0.5">
                         <span
                           className={`text-xs ${
-                            entry.localSaved
-                              ? "text-muted-foreground"
-                              : "text-muted-foreground/30"
+                            entry.localSaved ? "text-purple-600" : "text-card"
                           }`}
                         >
                           ✓
                         </span>
                         <span
                           className={`text-xs ${
-                            entry.serverSaved
-                              ? "text-muted-foreground"
-                              : "text-muted-foreground/30"
+                            entry.serverSaved ? "text-purple-600" : "text-card"
                           }`}
                         >
                           ✓
@@ -997,14 +996,13 @@ export function WorkoutLogger() {
         </div>
 
         <div className="flex gap-3 mt-8 pb-8">
-          <Button
+          <div
             onClick={() => setShowMaintenanceModal(true)}
-            variant="outline"
-            className="w-full hover:bg-destructive/10 flex items-center justify-center gap-2 text-muted-foreground leading-7 border-muted-foreground"
+            className="w-full cursor-pointer flex items-center justify-center gap-2 text-card border border-muted-foreground rounded-md py-4 bg-background"
           >
             <AlertCircle className="w-4 h-4" />
             Report Maintenance Issue
-          </Button>
+          </div>
         </div>
 
         {/* Maintenance Modal */}
