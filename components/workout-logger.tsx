@@ -41,9 +41,10 @@ interface WorkoutEntry {
   serverSaved: boolean;
 }
 
-export function WorkoutLogger() {
+export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
   // FIXED: Moved QR code generation to useEffect to prevent hydration mismatch
   const [qrCodeId, setQrCodeId] = useState("");
+  const [qrCode, setQrCode] = useState<string>(propQrCode || ""); // <-- NEW
 
   const [machineName, setMachineName] = useState("");
   const [isEditingMachineName, setIsEditingMachineName] = useState(false);
@@ -99,6 +100,31 @@ export function WorkoutLogger() {
     )}-${randomId.slice(6, 9)}`;
     setQrCodeId(formattedId);
   }, []);
+
+  // Load machine name from Supabase when user and qrCode are available
+  useEffect(() => {
+    if (!user || !qrCode) return;
+
+    const fetchMachineName = async () => {
+      const { data, error } = await supabase
+        .from("user_machines")
+        .select("custom_name")
+        .eq("user_id", user.id)
+        .eq("qr_code", qrCode)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching machine name:", error);
+        return;
+      }
+
+      if (data?.custom_name) {
+        setMachineName(data.custom_name);
+      }
+    };
+
+    fetchMachineName();
+  }, [user, qrCode]);
 
   // Load workouts from Supabase on component mount
   useEffect(() => {
@@ -299,6 +325,7 @@ export function WorkoutLogger() {
 
       // Prepare data - ALWAYS save to Supabase
       const workoutData: any = {
+        qr_code: qrCode,
         session_id: getSessionId(),
         machine_name: machineName || "Unnamed Machine",
         exercise_name: exerciseName,
@@ -345,6 +372,31 @@ export function WorkoutLogger() {
       serverSaved = true;
       savedEntryId = data.id.toString();
       console.log("✅ SUCCESS! Saved to Supabase. ID:", savedEntryId);
+
+      // ===== NEW CODE: Save machine name to user_machines =====
+      // Only save if user is logged in, QR code exists, and machine name is set
+      if (user.user && qrCode && machineName) {
+        const { error: upsertError } = await supabase
+          .from("user_machines")
+          .upsert(
+            {
+              user_id: user.user.id,
+              qr_code: qrCode,
+              custom_name: machineName,
+              updated_at: new Date().toISOString(),
+            },
+            {
+              onConflict: "user_id, qr_code",
+            },
+          );
+
+        if (upsertError) {
+          console.error("❌ Error saving machine name:", upsertError);
+        } else {
+          console.log("✅ Machine name saved to user_machines:", machineName);
+        }
+      }
+      // ===== END NEW CODE =====
     } catch (error) {
       console.error("❌ Error saving to Supabase:", error);
       // Continue with local save even if database fails
