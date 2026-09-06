@@ -9,16 +9,13 @@ export default async function QrCodePage({
 }) {
   const { qrCode } = params;
 
-  // Log the QR code for debugging
   console.log("QR Code requested:", qrCode);
 
-  // Initialize Supabase client directly using environment variables
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
 
-  // Validate the QR code against the database
   const { data, error } = await supabase
     .from("valid_qr_codes")
     .select("qr_code")
@@ -26,10 +23,28 @@ export default async function QrCodePage({
     .eq("is_active", true)
     .maybeSingle();
 
-  // If the QR code is not found, return a 404
+  // Log the full result for debugging
+  console.log("Supabase response:", { data, error });
+
   if (error || !data) {
     console.log("QR code not found:", qrCode);
-    notFound();
+    // TEMPORARY: Show the error on the page for debugging
+    return (
+      <div style={{ padding: "20px", fontFamily: "monospace" }}>
+        <h1>Debug: QR Code Validation Failed</h1>
+        <p>
+          QR Code: <strong>{qrCode}</strong>
+        </p>
+        <p>
+          Error: {error ? JSON.stringify(error) : "No error, but no data found"}
+        </p>
+        <p>Data: {data ? JSON.stringify(data) : "null"}</p>
+        <p>
+          Check your Supabase `valid_qr_codes` table to ensure this QR code
+          exists.
+        </p>
+      </div>
+    );
   }
 
   console.log("QR code found:", qrCode);
