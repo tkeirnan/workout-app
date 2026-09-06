@@ -9,12 +9,20 @@ export default async function QrCodePage({
 }) {
   const { qrCode } = params;
 
-  console.log("QR Code requested:", qrCode);
+  console.log("=== QR CODE DEBUGGING ===");
+  console.log("1. QR Code requested:", qrCode);
+  console.log("2. Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+  console.log(
+    "3. Supabase Key (first 10 chars):",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 10),
+  );
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
+
+  console.log("4. Querying valid_qr_codes table for:", qrCode);
 
   const { data, error } = await supabase
     .from("valid_qr_codes")
@@ -23,11 +31,14 @@ export default async function QrCodePage({
     .eq("is_active", true)
     .maybeSingle();
 
+  console.log("5. Query result - Data:", data);
+  console.log("6. Query result - Error:", error);
+
   if (error || !data) {
-    console.log("QR code not found:", qrCode);
+    console.log("7. QR code not found, returning 404");
     notFound();
   }
 
-  console.log("QR code found:", qrCode);
+  console.log("8. QR code found, rendering WorkoutLogger");
   return <WorkoutLogger qrCode={qrCode} />;
 }
