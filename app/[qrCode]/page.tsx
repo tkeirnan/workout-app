@@ -6,13 +6,25 @@ export default async function QrCodePage({
 }: {
   params: { qrCode: string };
 }) {
+  // Get the QR code from the URL
   const { qrCode } = params;
 
-  // 1. Check environment variables
+  // If no QR code is provided, show an error
+  if (!qrCode) {
+    return (
+      <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
+        <h1 style={{ color: "red" }}>❌ Error: No QR Code Provided</h1>
+        <p>The URL should be in the format: qrsets.com/YOUR-CODE</p>
+        <p>Example: qrsets.com/TEST001</p>
+      </div>
+    );
+  }
+
+  // Check environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // If environment variables are missing, show an error on the page
+  // If environment variables are missing, show an error
   if (!supabaseUrl || !supabaseKey) {
     return (
       <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
@@ -30,17 +42,18 @@ export default async function QrCodePage({
     );
   }
 
-  // 2. Try to query Supabase
+  // Initialize Supabase client
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  // Query the valid_qr_codes table
   const { data, error } = await supabase
     .from("public.valid_qr_codes")
     .select("qr_code")
-    .ilike("qr_code", qrCode)
+    .eq("qr_code", qrCode)
     .eq("is_active", true)
     .maybeSingle();
 
-  // 3. If there's an error or no data, show the problem on the page
+  // If there's an error or no data, show the debug page
   if (error || !data) {
     return (
       <div style={{ padding: "20px", fontFamily: "monospace" }}>
@@ -74,6 +87,6 @@ export default async function QrCodePage({
     );
   }
 
-  // 4. If everything works, load the app
+  // If everything works, load the app
   return <WorkoutLogger qrCode={qrCode} />;
 }
