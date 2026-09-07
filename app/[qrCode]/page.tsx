@@ -34,7 +34,7 @@ export default async function QrCodePage({
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await supabase
-    .from("valid_qr_codes")
+    .from("public.valid_qr_codes")
     .select("qr_code")
     .eq("qr_code", qrCode)
     .eq("is_active", true)
