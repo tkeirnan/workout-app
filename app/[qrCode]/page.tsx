@@ -36,7 +36,7 @@ export default async function QrCodePage({
   const { data, error } = await supabase
     .from("public.valid_qr_codes")
     .select("qr_code")
-    .eq("qr_code", qrCode)
+    .ilike("qr_code", qrCode)
     .eq("is_active", true)
     .maybeSingle();
 
