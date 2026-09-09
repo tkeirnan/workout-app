@@ -45,11 +45,11 @@ export default async function QrCodePage({
   // Initialize Supabase client
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Query the valid_qr_codes table
+  // Query the valid_qr_codes table using ilike (case-insensitive)
   const { data, error } = await supabase
     .from("public.valid_qr_codes")
     .select("qr_code")
-    .eq("qr_code", qrCode)
+    .ilike("qr_code", qrCode) // <-- CHANGED: .eq to .ilike
     .eq("is_active", true)
     .maybeSingle();
 
