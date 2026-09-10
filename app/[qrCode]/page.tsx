@@ -45,7 +45,7 @@ export default async function QrCodePage({
 
   // Query the valid_qr_codes table using ilike (case-insensitive)
   const { data, error } = await supabase
-    .from("public.valid_qr_codes")
+    .from("valid_qr_codes") // <-- FIXED: removed "public." prefix
     .select("qr_code")
     .ilike("qr_code", qrCode)
     .eq("is_active", true)
