@@ -132,11 +132,19 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
       try {
         const { data: user } = await supabase.auth.getUser();
         if (user.user) {
-          const { data: workouts, error } = await supabase
+          // Build the query
+          let query = supabase
             .from("workouts")
             .select("*")
             .eq("user_id", user.user.id)
             .order("created_at", { ascending: false });
+
+          // Filter by QR code if one is provided
+          if (qrCode) {
+            query = query.eq("qr_code", qrCode);
+          }
+
+          const { data: workouts, error } = await query;
 
           if (error) throw error;
 
@@ -186,7 +194,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
     }
 
     loadWorkouts();
-  }, []);
+  }, [qrCode]); // <-- Changed from [] to [qrCode]
 
   // Handle authentication
   useEffect(() => {
