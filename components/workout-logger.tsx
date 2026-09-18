@@ -194,7 +194,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
     }
 
     loadWorkouts();
-  }, [qrCode]); // <-- Changed from [] to [qrCode]
+  }, [qrCode]); // <-- changed from [] to [qrCode]
 
   // Handle authentication
   useEffect(() => {
