@@ -440,16 +440,13 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
   const handleGoogleLogin = async () => {
     setIsLoadingAuth(true);
 
-    // Determine if we're on mobile (accessing via IP) or desktop (localhost)
-    const isMobile = window.location.hostname !== "localhost";
-    const redirectUrl = isMobile
-      ? "http://192.168.12.19:3000/auth/callback" // For phone
-      : `${window.location.origin}/auth/callback`; // For browser
+    // Capture the current path so we can return to it after login
+    const currentPath = window.location.pathname;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(currentPath)}`,
       },
     });
 
