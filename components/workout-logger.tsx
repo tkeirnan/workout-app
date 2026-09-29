@@ -1278,18 +1278,18 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
           <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4">
             <Card className="w-full max-w-md bg-background rounded-t-lg sm:rounded-lg shadow-xl border-border/50 p-5 sm:p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                <h2 className="text-lg sm:text-xl font-bold text-white">
                   Why track per machine?
                 </h2>
                 <button
                   onClick={() => setShowInfoModal(false)}
-                  className="p-1 rounded hover:bg-muted transition-colors"
+                  className="p-1 rounded hover:bg-white/10 transition-colors"
                   aria-label="Close"
                 >
-                  <X className="w-5 h-5 text-muted-foreground" />
+                  <X className="w-5 h-5 text-white" />
                 </button>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-white leading-relaxed">
                 No two exercise machines are alike — even "identical" ones wear
                 and resist loads differently. This app tracks your progressive
                 overload per exercise machine, not per exercise. Better tracking
