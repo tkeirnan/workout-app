@@ -976,7 +976,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
           )}
 
           {entries.length === 0 ? (
-            <p className="text-muted-foreground text-sm text-center py-0">
+            <p className="text-white text-sm text-center py-0">
               No workouts logged yet. Start by logging your first exercise!
             </p>
           ) : (
@@ -1114,7 +1114,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
           <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4">
             <Card className="w-full max-w-md bg-background rounded-t-lg sm:rounded-lg shadow-xl border-border/50 p-5 sm:p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                <h2 className="text-lg sm:text-xl font-bold text-white">
                   Report Maintenance
                 </h2>
                 <button
@@ -1158,11 +1158,11 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                 <div className="space-y-4">
                   {!showContactForm ? (
                     <div>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-sm text-white mb-4">
                         The gym owner for this machine hasn't set up the
                         maintenance reporting system yet.
                       </p>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-sm text-white mb-4">
                         Help us connect with the gym owner by providing their
                         contact information, and we'll get them set up so you
                         can report maintenance issues directly.
@@ -1177,7 +1177,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                         <Button
                           onClick={() => setShowMaintenanceModal(false)}
                           variant="outline"
-                          className="flex-1 border-border hover:bg-muted text-foreground bg-transparent"
+                          className="flex-1 border-white hover:bg-white/10 text-white bg-transparent"
                         >
                           Cancel
                         </Button>
