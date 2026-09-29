@@ -11,6 +11,7 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  HelpCircle,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -79,6 +80,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
   const [user, setUser] = useState<any>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [showIntroBanner, setShowIntroBanner] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   // Generate session ID
   const getSessionId = () => {
@@ -615,19 +617,28 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
               </Button>
             </div>
           ) : (
-            <div
-              onClick={() => setIsEditingMachineName(true)}
-              className="cursor-pointer group"
-            >
-              <h1 className="sm:text-3xl font-bold text-pf-yellow group-hover:text-accent transition-colors text-2xl">
-                {machineName || "Exercise Machine Name"}
-              </h1>
-              <p
-                style={{ color: "#FFFFFF" }}
-                className="text-xs mt-1 transition-colors"
+            <div className="flex items-start justify-between gap-2">
+              <div
+                onClick={() => setIsEditingMachineName(true)}
+                className="cursor-pointer group flex-1"
               >
-                Tap to edit
-              </p>
+                <h1 className="sm:text-3xl font-bold text-pf-yellow group-hover:text-accent transition-colors text-2xl">
+                  {machineName || "Exercise Machine Name"}
+                </h1>
+                <p
+                  style={{ color: "#FFFFFF" }}
+                  className="text-xs mt-1 transition-colors"
+                >
+                  Tap to edit
+                </p>
+              </div>
+              <button
+                onClick={() => setShowInfoModal(true)}
+                className="p-1 rounded-full hover:bg-white/10 transition-colors flex-shrink-0 mt-1"
+                aria-label="About this app"
+              >
+                <HelpCircle className="w-5 h-5 text-white" />
+              </button>
             </div>
           )}
         </div>
@@ -1254,6 +1265,38 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                   Clear
                 </Button>
               </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Info Modal - Reopens the intro explanation */}
+        {showInfoModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-md bg-background rounded-t-lg sm:rounded-lg shadow-xl border-border/50 p-5 sm:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                  Why track per machine?
+                </h2>
+                <button
+                  onClick={() => setShowInfoModal(false)}
+                  className="p-1 rounded hover:bg-muted transition-colors"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                No two exercise machines are alike — even "identical" ones wear
+                and resist loads differently. This app tracks your progressive
+                overload per exercise machine, not per exercise. Better tracking
+                means better gains.
+              </p>
+              <Button
+                onClick={() => setShowInfoModal(false)}
+                className="w-full mt-4 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+              >
+                Got it
+              </Button>
             </Card>
           </div>
         )}
