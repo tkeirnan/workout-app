@@ -910,7 +910,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                 onClick={handleLogout}
                 size="sm"
                 variant="outline"
-                className="text-xs border-white text-white hover:bg-white/10 bg-transparent"
+                className="text-xs bg-accent text-white border-accent hover:bg-accent/90"
               >
                 Sign Out
               </Button>
