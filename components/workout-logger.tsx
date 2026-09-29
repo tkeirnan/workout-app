@@ -629,7 +629,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                   style={{ color: "#FFFFFF" }}
                   className="text-sm mt-1 transition-colors"
                 >
-                  Tap to name this machine
+                  Tap above to name this machine
                 </p>
               </div>
               <button
