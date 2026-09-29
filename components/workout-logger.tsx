@@ -78,6 +78,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
   // Add these with your other useState declarations:
   const [user, setUser] = useState<any>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [showIntroBanner, setShowIntroBanner] = useState(false);
 
   // Generate session ID
   const getSessionId = () => {
@@ -100,6 +101,15 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
     )}-${randomId.slice(6, 9)}`;
     setQrCodeId(formattedId);
   }, []);
+
+  // Show intro banner only if the user hasn't dismissed it for this QR code
+  useEffect(() => {
+    if (!qrCode) return;
+    const seen = localStorage.getItem(`seen-intro-${qrCode}`);
+    if (!seen) {
+      setShowIntroBanner(true);
+    }
+  }, [qrCode]);
 
   // Load machine name from Supabase when user and qrCode are available
   useEffect(() => {
@@ -621,6 +631,31 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
             </div>
           )}
         </div>
+
+        {/* One-time Intro Banner */}
+        {showIntroBanner && (
+          <div className="mb-6 bg-white border-l-4 border-yellow-400 rounded-r-lg p-4 shadow-lg relative">
+            <button
+              onClick={() => {
+                localStorage.setItem(`seen-intro-${qrCode}`, "true");
+                setShowIntroBanner(false);
+              }}
+              className="absolute top-2 right-2 p-1 rounded hover:bg-gray-100 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-4 h-4 text-gray-500" />
+            </button>
+            <h3 className="font-bold text-gray-900 mb-2 pr-6">
+              Why track per machine?
+            </h3>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              No two exercise machines are alike — even "identical" ones wear
+              and resist loads differently. This app tracks your progressive
+              overload per exercise machine, not per exercise. Better tracking
+              means better gains.
+            </p>
+          </div>
+        )}
 
         {/* Input Card */}
         <Card className="p-5 sm:p-6 shadow-lg mb-6 border-border/50">
