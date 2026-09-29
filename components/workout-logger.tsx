@@ -1187,7 +1187,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                     <div>
                       <button
                         onClick={() => setShowContactForm(false)}
-                        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3"
+                        className="flex items-center gap-1 text-sm text-white hover:text-yellow-300 mb-3 transition-colors"
                       >
                         ← Back
                       </button>
