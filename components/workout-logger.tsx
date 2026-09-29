@@ -622,14 +622,14 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                 onClick={() => setIsEditingMachineName(true)}
                 className="cursor-pointer group flex-1"
               >
-                <h1 className="sm:text-3xl font-bold text-pf-yellow group-hover:text-accent transition-colors text-2xl">
-                  {machineName || "Exercise Machine Name"}
+                <h1 className="sm:text-3xl font-bold text-white group-hover:text-yellow-300 transition-colors text-2xl">
+                  {machineName || "Enter Machine Name"}
                 </h1>
                 <p
                   style={{ color: "#FFFFFF" }}
-                  className="text-xs mt-1 transition-colors"
+                  className="text-sm mt-1 transition-colors"
                 >
-                  Tap to edit
+                  Tap to name this machine
                 </p>
               </div>
               <button
