@@ -1191,7 +1191,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                       >
                         ← Back
                       </button>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-sm text-white mb-4">
                         Please provide any contact information you have for the
                         gym owner or management (email, phone, gym name, etc.).
                       </p>
@@ -1214,7 +1214,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
                             setShowMaintenanceModal(false);
                           }}
                           variant="outline"
-                          className="flex-1 border-border hover:bg-muted text-foreground bg-transparent"
+                          className="flex-1 border-white hover:bg-white/10 text-white bg-transparent"
                         >
                           Cancel
                         </Button>
