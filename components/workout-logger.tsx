@@ -872,7 +872,8 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
           ) : (
             <div className="text-center bg-muted/30 p-4 rounded-lg">
               <p className="text-sm text-muted-foreground mb-3">
-                Sign in with Google to save workouts privately across devices
+                Sign in with Google to track your progressive overload on this
+                specific machine.
               </p>
               <Button
                 onClick={handleGoogleLogin}
