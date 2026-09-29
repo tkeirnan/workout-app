@@ -1099,6 +1099,9 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
           )}
         </div>
 
+        {/* Report Maintenance button hidden during trial period */}
+        {/* To re-enable: remove the comment markers around this block */}
+        {/*
         <div className="flex gap-3 mt-8 pb-8">
           <div
             onClick={() => setShowMaintenanceModal(true)}
@@ -1108,6 +1111,7 @@ export function WorkoutLogger({ qrCode: propQrCode }: { qrCode?: string }) {
             Report Maintenance Issue
           </div>
         </div>
+        */}
 
         {/* Maintenance Modal */}
         {showMaintenanceModal && (
